@@ -5,3 +5,13 @@ services:
     container_name: movies-api
     ports:
       - '9000:9000'
+
+networks:
+  database_network:
+    driver: bridge
+
+  movie_api_network:
+    driver: bridge
+
+  internal_network:
+    driver: bridge
