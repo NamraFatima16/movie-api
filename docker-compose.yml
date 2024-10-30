@@ -5,6 +5,14 @@ services:
     container_name: movies-api
     ports:
       - '9000:9000'
+    environment:
+        - MONGODB_URI=mongodb://admin:secret@mongoDB:27017  
+        - REDIS_URI=redis://redis  
+        - ENABLE_WRITING_HANDLERS=false
+    networks:
+        - database_network  
+        - movie_api_network
+        
 
   mongodb:
   container_name: mongoDB
@@ -42,6 +50,7 @@ redis:
     image: redis:alpine  
     networks:
       - movie_api_network
+
 
 
 
