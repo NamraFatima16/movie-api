@@ -12,7 +12,7 @@ services:
     networks:
         - database_network  
         - movie_api_network
-        
+
 
   mongodb:
   container_name: mongoDB
@@ -51,7 +51,9 @@ redis:
     networks:
       - movie_api_network
 
-
+depends_on:
+      - mongodb  
+      - redis
 
 
 
