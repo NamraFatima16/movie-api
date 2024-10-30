@@ -51,6 +51,7 @@ redis:
     networks:
       - movie_api_network
 
+      
 depends_on:
       - mongodb  
       - redis
