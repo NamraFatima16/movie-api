@@ -1,1 +1,3 @@
 .env
+#dont need the folder in git commit as it contains the database files
+/data
