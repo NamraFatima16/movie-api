@@ -6,57 +6,48 @@ services:
     ports:
       - '9000:9000'
     environment:
-        - MONGODB_URI=mongodb://admin:secret@mongoDB:27017  
-        - REDIS_URI=redis://redis  
-        - ENABLE_WRITING_HANDLERS=false
+      - MONGODB_URI=mongodb://admin:secret@mongodb:27017
+      - REDIS_URI=redis://redis
+      - ENABLE_WRITING_HANDLERS=false
     networks:
-        - database_network  
-        - movie_api_network
-
-
-  mongodb:
-  container_name: mongoDB
-  image: mongo:8.0-rc
-  environment:
-    - MONGO_INITDB_ROOT_USERNAME=admin
-    - MONGO_INITDB_ROOT_PASSWORD=secret
-  networks:
-    - database_network
-    - mongo_network
-  # volumes:
-  # -  need to figure out  
-
-mongo-express:
-  container_name: mongoExpress
-  restart: always
-  image: mongo-express:1.0-20-alpine3.19
-  environment:
-    - ME_CONFIG_MONGODB_SERVER=mongodb
-    - ME_CONFIG_MONGODB_PORT=27017
-    - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
-    - ME_CONFIG_MONGODB_ADMINPASSWORD=secret
-
-  networks:
-    - mongo_network
-
-    # dont need port forwarding nothing needs to be accessed from outside 
-
-    # volumes:
-    # -  need to figure out  
-
-
-redis:
-    container_name: redis
-    image: redis:alpine  
-    networks:
+      - database_network
       - movie_api_network
-
-      
-depends_on:
-      - mongodb  
+    # Controls the order in which the container starts 
+    depends_on:
+      - mongodb
       - redis
 
+  mongodb:
+    container_name: mongoDB
+    image: mongo:8.0-rc
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    networks:
+      - database_network
+      - mongo_network
+    volumes:
+      - ./data:/data/db
 
+  mongo-express:
+    container_name: mongoExpress
+    restart: always
+    image: mongo-express:1.0-20-alpine3.19
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=secret
+    ports:
+      - '8081:8081'
+    networks:
+      - mongo_network
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    networks:
+      - movie_api_network
 
 networks:
   database_network:
