@@ -49,6 +49,26 @@ services:
     networks:
       - movie_api_network
 
+  mongodb-seed:   
+    image: mongo
+    container_name: mongodb-seed
+    depends_on:
+      - mongodb
+    volumes:
+      - ./seeding.json:/seeding.json
+    networks:
+      - mongo_network
+    command: >
+      mongoimport --host mongodb
+      --db tmdb_movies
+      --collection movies
+      --authenticationDatabase admin
+      --username admin
+      --password secret
+      --drop
+      --jsonArray
+      --file /seeding.json 
+
 networks:
   database_network:
     driver: bridge
