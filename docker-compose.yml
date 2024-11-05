@@ -42,6 +42,8 @@ services:
       - '8081:8081'
     networks:
       - mongo_network
+    profiles:
+      - dev
 
   redis:
     container_name: redis
@@ -68,6 +70,8 @@ services:
       --drop
       --jsonArray
       --file /seeding.json 
+    profiles:
+      - dev
 
 networks:
   database_network:
